@@ -1,18 +1,30 @@
+<<<<<<< HEAD
+name: Automated API
+=======
 name: Automated API tests using CI pipelines Postman with multi os
+>>>>>>> 0e412e5afbed65fdca7f4390788e9a2b7e9d4b3b
 
-on: push
+env:
+  POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
 
 env:
   POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
 
 jobs:
-  automated-api-tests:
+  automated-api-tests:z
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+<<<<<<< HEAD
+      - name: Use node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+      - name: Install Newman
+=======
 
       - name: Set up JDK
         uses: actions/setup-java@v3
@@ -24,7 +36,13 @@ jobs:
         run: mvn clean install
 
       - name: Start server
+>>>>>>> 0e412e5afbed65fdca7f4390788e9a2b7e9d4b3b
         run: |
+<<<<<<< HEAD
+          npm install -g newman
+          npm install -g newman-reporter-htmlextra
+      - name: Fetch Postman collection
+=======
           mvn spring-boot:run &
           # Wait for the server to be ready
           until curl -s http://localhost:8080 > /dev/null; do
@@ -39,7 +57,26 @@ jobs:
           node-version: '20.x'
 
       - name: Install Newman
+>>>>>>> 0e412e5afbed65fdca7f4390788e9a2b7e9d4b3b
         run: |
+<<<<<<< HEAD
+          curl -X GET "https://api.getpostman.com/collections/36297517-ebd82604-6763-4115-9ff6-d37d84a5964e" \
+            -H "X-Api-Key: ${POSTMAN_API_KEY}" > collection.json
+        shell: bash
+      - name: Fetch Postman Environment
+        run: |
+          curl -X GET "https://api.getpostman.com/environments/36297517-14fbf929-2ed6-40ec-be7c-b4fda99486eb" \
+            -H "X-Api-Key: ${POSTMAN_API_KEY}" > environment.json
+        shell: bash
+      - name: Run API test with Newman
+        run: |
+          newman run collection.json -e environment.json --reporters cli,htmlextra --reporter-htmlextra-export report-${{ matrix.os }}.html
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-report-${{ matrix.os }}
+          path: report-${{ matrix.os }}.html
+=======
           npm install -g newman newman-reporter-htmlextra
 
       - name: Fetch Postman collection
@@ -64,3 +101,5 @@ jobs:
           name: newman-report-${{ matrix.os }}
           path: report-${{ matrix.os }}.html
 
+
+>>>>>>> 0e412e5afbed65fdca7f4390788e9a2b7e9d4b3b
